@@ -109,7 +109,10 @@ class Router {
             $action = $this->params['action'];
             $action = $this->convertToCamelCase($action);
 
-            if (is_callable([$controller_object, $action])) {
+						// Removed based on security hole if user visited:
+						// /posts/indexAction directly in url address bar
+            // if (is_callable([$controller_object, $action])) {
+            if (preg_match('/action$/i', $action) == 0) {
                 $controller_object->$action();
 
             } else {
