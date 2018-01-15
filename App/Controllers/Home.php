@@ -2,10 +2,13 @@
 
 namespace App\Controllers;
 
+use Core\View;
+use Core\Controller;
+
 /**
  * Home Controller
  */
-class Home extends \Core\Controller {
+class Home extends Controller {
 
 	/**
 	 * Before filter
@@ -15,7 +18,7 @@ class Home extends \Core\Controller {
 	protected function before()
 	{
 		echo '(before) ';
-		return false; // simulates a middleware > check logged in
+		// return false; // simulates a middleware > check logged in
 	}
 
 	/**
@@ -35,6 +38,7 @@ class Home extends \Core\Controller {
 	 */
 	public function indexAction()
 	{
-		echo 'HomeController @ index()';
+		// echo 'HomeController @ index()';
+		View::render('home/index.php');
 	}
 }
