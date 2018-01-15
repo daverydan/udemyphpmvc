@@ -2,13 +2,14 @@
 
 namespace App\Controllers;
 
+use Core\Controller;
+
 /**
  * Posts controller
  *
  * PHP version 5.4
  */
-class Posts extends \Core\Controller
-{
+class Posts extends Controller {
     /**
      * Show the index page
      *

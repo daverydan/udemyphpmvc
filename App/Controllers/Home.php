@@ -38,7 +38,14 @@ class Home extends Controller {
 	 */
 	public function indexAction()
 	{
-		// echo 'HomeController @ index()';
-		View::render('home/index.php');
+		// Data Vars
+		$name = 'Danny';
+		$colors = ['red', 'green', 'blue'];
+
+		View::render('home/index.php', compact('name', 'colors'));
+		// 	[
+		// 	'name'	=> 'Danny',
+		// 	'colors'	=> ['red', 'green', 'blue']
+		// ]
 	}
 }
