@@ -17,7 +17,7 @@ class Home extends Controller {
 	 */
 	protected function before()
 	{
-		echo '(before) ';
+		// echo '(before) ';
 		// return false; // simulates a middleware > check logged in
 	}
 
@@ -28,7 +28,7 @@ class Home extends Controller {
 	 */
 	protected function after()
 	{
-		echo ' (after)';
+		// echo ' (after)';
 	}
 
 	/**
@@ -41,8 +41,14 @@ class Home extends Controller {
 		// Data Vars
 		$name = 'Danny';
 		$colors = ['red', 'green', 'blue'];
-
+		
 		View::render('home/index.php', compact('name', 'colors'));
+		// View::renderTemplate('home/index.html', compact('name', 'colors'));
+		// View::renderTemplate('home/index.html', [
+		// 	'name'	=> 'Danny',
+		// 	'colors'	=> ['red', 'green', 'blue']
+		// ]);
+		// View::renderTemplate('home/index.html', compact('name', 'colors'));
 		// 	[
 		// 	'name'	=> 'Danny',
 		// 	'colors'	=> ['red', 'green', 'blue']
