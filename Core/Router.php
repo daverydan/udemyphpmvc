@@ -96,29 +96,31 @@ class Router {
    */
   public function dispatch($url)
   {
-      if ($this->match($url)) {
-          $controller = $this->params['controller'];
-          $controller = $this->convertToStudlyCaps($controller);
-          $controller = "App\Controllers\\$controller";
+  	$url = $this->removeQueryStringVariables($url);
 
-          if (class_exists($controller)) {
-              $controller_object = new $controller();
+    if ($this->match($url)) {
+        $controller = $this->params['controller'];
+        $controller = $this->convertToStudlyCaps($controller);
+        $controller = "App\Controllers\\$controller";
 
-              $action = $this->params['action'];
-              $action = $this->convertToCamelCase($action);
+        if (class_exists($controller)) {
+            $controller_object = new $controller();
 
-              if (is_callable([$controller_object, $action])) {
-                  $controller_object->$action();
+            $action = $this->params['action'];
+            $action = $this->convertToCamelCase($action);
 
-              } else {
-                  echo "Method $action (in controller $controller) not found";
-              }
-          } else {
-              echo "Controller class $controller not found";
-          }
-      } else {
-          echo 'No route matched.';
-      }
+            if (is_callable([$controller_object, $action])) {
+                $controller_object->$action();
+
+            } else {
+                echo "Method $action (in controller $controller) not found";
+            }
+        } else {
+            echo "Controller class $controller not found";
+        }
+    } else {
+        echo 'No route matched.';
+    }
   }
 
   /**
@@ -131,7 +133,7 @@ class Router {
    */
   protected function convertToStudlyCaps($string)
   {
-      return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
+    return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
   }
 
   /**
@@ -144,6 +146,44 @@ class Router {
    */
   protected function convertToCamelCase($string)
   {
-      return lcfirst($this->convertToStudlyCaps($string));
+    return lcfirst($this->convertToStudlyCaps($string));
   }
+
+	/**
+	 * Remove the query string variables from the URL (if any). As the full
+	 * query string is used for the route, any variables at the end will need
+	 * to be removed before the route is matched to the routing table. For
+	 * example:
+	 *
+	 *   URL                           $_SERVER['QUERY_STRING']  Route
+	 *   -------------------------------------------------------------------
+	 *   localhost                     ''                        ''
+	 *   localhost/?                   ''                        ''
+	 *   localhost/?page=1             page=1                    ''
+	 *   localhost/posts?page=1        posts&page=1              posts
+	 *   localhost/posts/index         posts/index               posts/index
+	 *   localhost/posts/index?page=1  posts/index&page=1        posts/index
+	 *
+	 * A URL of the format localhost/?page (one variable name, no value) won't
+	 * work however. (NB. The .htaccess file converts the first ? to a & when
+	 * it's passed through to the $_SERVER variable).
+	 *
+	 * @param string $url The full URL
+	 *
+	 * @return string The URL with the query string variables removed
+	 */
+	protected function removeQueryStringVariables($url)
+	{
+    if ($url != '') {
+        $parts = explode('&', $url, 2);
+
+        if (strpos($parts[0], '=') === false) {
+            $url = $parts[0];
+        } else {
+            $url = '';
+        }
+    }
+
+    return $url;
+	}
 }
