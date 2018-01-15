@@ -29,6 +29,9 @@ class Router {
 		// Convert variables e.g. {controller}
 		$route = preg_replace('/\{([a-z]+)\}/', '(?P<\1>[a-z-]+)', $route);
 
+		// Convert variable with custom regular expressions e.g. {id:d+}
+		$route = preg_replace('/\{([a-z]+):([^\}]+)\}/', '(?P<\1>\2)', $route);
+
 		// Add start and end delimiters, and case insensitive flag
 		$route = '/^' . $route . '$/i';
 
@@ -80,7 +83,7 @@ class Router {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
